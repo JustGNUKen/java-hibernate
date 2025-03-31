@@ -6,6 +6,8 @@ import com.karazin.blog.model.User;
 import com.karazin.blog.repository.PostRepository;
 import com.karazin.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,11 +36,22 @@ public class PostController {
         return "create-post";
     }
 
-    @PostMapping("/posts")
+    @PostMapping("/create-post")
     public String createPost(@RequestParam String title, @RequestParam String body) {
-        User user = userRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException("Default user not found. Please ensure a user exists in the database."));
+        // Get the currently logged-in user's username
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
 
+        // Fetch the user from the database
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Create and save the post
         Post post = new Post();
         post.setTitle(title);
         post.setBody(body);
