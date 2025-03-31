@@ -18,4 +18,7 @@ public interface FollowRepository extends JpaRepository<Follow, FollowId> {
     // Get the list of users who are following the logged-in user
     @Query("SELECT f.followingUser FROM Follow f WHERE f.followedUser = :user")
     List<User> findFollowersByUser(@Param("user") User user);
+
+    // Delete a follow relationship
+    void deleteByFollowingUserAndFollowedUser(User followingUser, User followedUser);
 }
