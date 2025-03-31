@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Posts</title>
+    <style>
+        body { font-family: sans-serif; }
+        .post { border: 1px solid #ccc; margin-bottom: 1em; padding: 1em; }
+        .post h2 { margin-top: 0; }
+    </style>
+</head>
+<body>
+
+<h1>All Blog Posts</h1>
+
+<div th:if="${posts.isEmpty()}">
+    <p>No posts found.</p>
+</div>
+
+<div th:unless="${posts.isEmpty()}">
+    <div th:each="post : ${posts}" class="post">
+        <h2 th:text="${post.title}">Post Title</h2>
+        <!-- Display user safely, checking if user object exists -->
+        <p><em>by <span th:if="${post.user}" th:text="${post.user.username}">Username</span><span th:unless="${post.user}">Unknown Author</span></em></p>
+        <p th:text="${post.body}">Post body content goes here...</p>
+        <p><small th:text="'Created on: ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">Created date</small></p>
+        <p><small th:text="'Status: ' + ${post.status}">Status</small></p>
+    </div>
+</div>
+
+<!-- Add links/forms later to create new posts -->
+
+</body>
+</html>
