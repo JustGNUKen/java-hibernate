@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Blog Posts</title>
+    <title>All Blog Posts</title>
     <style>
         body { font-family: sans-serif; }
         .post { border: 1px solid #ccc; margin-bottom: 1em; padding: 1em; }
@@ -12,6 +12,8 @@
 <body>
 
 <h1>All Blog Posts</h1>
+<a href="/create-post">Create a New Post</a>
+<hr>
 
 <div th:if="${posts.isEmpty()}">
     <p>No posts found.</p>
@@ -25,10 +27,10 @@
         <p th:text="${post.body}">Post body content goes here...</p>
         <p><small th:text="'Created on: ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">Created date</small></p>
         <p><small th:text="'Status: ' + ${post.status}">Status</small></p>
+        <p><i>By User ID: <span th:text="${post.user.id}"></span></i></p>
+        <hr>
     </div>
 </div>
-
-<!-- Add links/forms later to create new posts -->
 
 </body>
 </html>

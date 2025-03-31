@@ -1,8 +1,6 @@
 // src/main/java/com/example/blog/model/Post.java
 package com.karazin.blog.model;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,7 +16,7 @@ public class Post {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Lob // Good practice for potentially large text fields
+    @Lob
     @Column(name = "body", columnDefinition = "TEXT")
     private String body;
 
@@ -29,9 +27,13 @@ public class Post {
     @Column(name = "status")
     private String status;
 
-    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     public Post() {
     }
