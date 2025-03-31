@@ -1,8 +1,10 @@
 // src/main/java/com/example/blog/controller/PostController.java
 package com.karazin.blog.controller;
 
+import com.karazin.blog.model.Follow;
 import com.karazin.blog.model.Post;
 import com.karazin.blog.model.User;
+import com.karazin.blog.repository.FollowRepository;
 import com.karazin.blog.repository.PostRepository;
 import com.karazin.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,36 @@ public class PostController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private FollowRepository followRepository;
+
+    private User getLoggedInUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            return userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Logged-in user not found"));
+        }
+        return null; // Anonymous user
+    }
+
     @GetMapping("/posts")
-    public String getAllPosts(Model model) {
-        model.addAttribute("posts", postRepository.findAll());
+    public String viewPosts(Model model) {
+        User loggedInUser = getLoggedInUser();
+
+        // Fetch all posts
+        var posts = postRepository.findAll();
+        model.addAttribute("posts", posts);
+
+        // Add follow status for logged-in users
+        if (loggedInUser != null) {
+            model.addAttribute("loggedInUser", loggedInUser);
+            model.addAttribute("following", followRepository.findFollowedUsersByUser(loggedInUser));
+        } else {
+            model.addAttribute("loggedInUser", null);
+            model.addAttribute("following", List.of()); // Empty list for anonymous users
+        }
+
         return "posts";
     }
 
@@ -39,17 +68,7 @@ public class PostController {
     @PostMapping("/create-post")
     public String createPost(@RequestParam String title, @RequestParam String body) {
         // Get the currently logged-in user's username
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        // Fetch the user from the database
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = getLoggedInUser();
 
         // Create and save the post
         Post post = new Post();
