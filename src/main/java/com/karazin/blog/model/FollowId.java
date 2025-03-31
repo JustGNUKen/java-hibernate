@@ -1,8 +1,8 @@
 // src/main/java/com/example/blog/model/FollowId.java
 package com.karazin.blog.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
