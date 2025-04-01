@@ -26,7 +26,7 @@ public class FollowController {
             return userDAO.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("Logged-in user not found"));
         }
-        return null; // Anonymous user
+        return null;
     }
 
     @PostMapping("/follow")

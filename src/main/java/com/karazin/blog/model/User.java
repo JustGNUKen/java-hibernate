@@ -1,4 +1,3 @@
-// src/main/java/com/example/blog/model/User.java
 package com.karazin.blog.model;
 
 import jakarta.persistence.*;
@@ -26,8 +25,6 @@ public class User {
 
     public User() {
     }
-
-    // Getters and Setters
 
     public Long getId() {
         return id;

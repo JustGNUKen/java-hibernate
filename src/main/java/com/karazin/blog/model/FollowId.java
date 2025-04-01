@@ -1,4 +1,3 @@
-// src/main/java/com/example/blog/model/FollowId.java
 package com.karazin.blog.model;
 
 import jakarta.persistence.Column;
@@ -24,8 +23,6 @@ public class FollowId implements Serializable {
         this.followingUserId = followingUserId;
         this.followedUserId = followedUserId;
     }
-
-    // Getters and Setters
 
     public Long getFollowingUserId() {
         return followingUserId;

@@ -40,10 +40,9 @@ public class AccountController {
         try {
             User loggedInUser = getLoggedInUser();
             if (loggedInUser == null) {
-                return "redirect:/login"; // Redirect anonymous users to login
+                return "redirect:/login";
             }
 
-            // Delegate to FollowDAO
             List<User> followers = followDAO.findFollowersByUser(loggedInUser);
             List<User> following = followDAO.findFollowedUsersByUser(loggedInUser);
 
@@ -66,7 +65,7 @@ public class AccountController {
         try {
             User loggedInUser = getLoggedInUser();
             if (loggedInUser == null) {
-                return "redirect:/login"; // Redirect anonymous users to login
+                return "redirect:/login";
             }
 
             User userToUnfollow = userDAO.findById(userId)

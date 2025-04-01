@@ -28,10 +28,10 @@ public class UserController {
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String password, Model model) {
         try {
-            System.out.println("Attempting to register user: " + username); // Debugging log
+            System.out.println("Attempting to register user: " + username);
             if (userDAO.findByUsername(username).isPresent()) {
                 model.addAttribute("error", "Username already exists. Please choose a different username.");
-                System.out.println("Username already exists: " + username); // Debugging log
+                System.out.println("Username already exists: " + username);
                 return "register";
             }
 
@@ -41,15 +41,15 @@ public class UserController {
             user.setPassword(encodedPassword);
             user.setRole("USER");
 
-            System.out.println("Encoded password: " + encodedPassword); // Debugging log
+            System.out.println("Encoded password: " + encodedPassword);
 
             userDAO.save(user);
 
-            System.out.println("User registered successfully: " + username); // Debugging log
+            System.out.println("User registered successfully: " + username);
             return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("error", "An error occurred during registration.");
-            System.err.println("Error during registration: " + e.getMessage()); // Debugging log
+            System.err.println("Error during registration: " + e.getMessage());
             return "register";
         }
     }

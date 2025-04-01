@@ -1,4 +1,3 @@
-// src/main/java/com/example/blog/repository/UserRepository.java
 package com.karazin.blog.repository;
 
 import com.karazin.blog.model.User;

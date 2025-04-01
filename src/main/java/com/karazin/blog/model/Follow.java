@@ -20,7 +20,7 @@ public class Follow {
     private User followingUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("followedUserId") // Maps the 'followedUserId' part of the embedded ID
+    @MapsId("followedUserId")
     @JoinColumn(name = "followed_user_id")
     private User followedUser;
 

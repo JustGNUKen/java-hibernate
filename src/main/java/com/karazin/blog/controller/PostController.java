@@ -37,24 +37,22 @@ public class PostController {
             return userRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("Logged-in user not found"));
         }
-        return null; // Anonymous user
+        return null;
     }
 
     @GetMapping("/posts")
     public String viewPosts(Model model) {
         User loggedInUser = getLoggedInUser();
 
-        // Fetch all posts
         var posts = postRepository.findAll();
         model.addAttribute("posts", posts);
 
-        // Add follow status for logged-in users
         if (loggedInUser != null) {
             model.addAttribute("loggedInUser", loggedInUser);
             model.addAttribute("following", followRepository.findFollowedUsersByUser(loggedInUser));
         } else {
             model.addAttribute("loggedInUser", null);
-            model.addAttribute("following", List.of()); // Empty list for anonymous users
+            model.addAttribute("following", List.of());
         }
 
         return "posts";
@@ -67,10 +65,8 @@ public class PostController {
 
     @PostMapping("/create-post")
     public String createPost(@RequestParam String title, @RequestParam String body) {
-        // Get the currently logged-in user's username
         User user = getLoggedInUser();
 
-        // Create and save the post
         Post post = new Post();
         post.setTitle(title);
         post.setBody(body);

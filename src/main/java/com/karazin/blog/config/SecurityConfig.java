@@ -24,12 +24,12 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests()
                 .requestMatchers("/register", "/posts", "/css/**").permitAll() // Allow anonymous access
-                .requestMatchers("/create-post").authenticated() // Restrict post creation to logged-in users
+                .requestMatchers("/create-post").authenticated() // Restrict post creation to logged users
                 .anyRequest().authenticated()
             .and()
             .formLogin()
                 .permitAll()
-                .defaultSuccessUrl("/posts", true) // Redirect to /posts after successful login
+                .defaultSuccessUrl("/posts", true) // Redirect to /posts login
             .and()
             .logout()
                 .logoutSuccessUrl("/posts") // Redirect to /posts after logout

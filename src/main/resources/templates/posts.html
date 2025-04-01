@@ -35,7 +35,6 @@
             <p><small th:text="'Created on: ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">Created date</small></p>
             <p><small th:text="'Status: ' + ${post.status}">Status</small></p>
 
-            <!-- Show Follow/Unfollow button if the post is not by the logged-in user -->
             <div th:if="${post.user.id != loggedInUser?.id}">
                 <form th:action="@{/follow}" method="post" th:if="${loggedInUser == null || !#lists.contains(following, post.user)}">
                     <input type="hidden" name="userId" th:value="${post.user.id}" />
