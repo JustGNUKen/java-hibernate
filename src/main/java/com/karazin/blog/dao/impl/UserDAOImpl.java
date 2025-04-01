@@ -15,10 +15,13 @@ public class UserDAOImpl implements UserDAO {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
+            System.out.println("Saving user: " + user.getUsername()); // Debugging log
             session.saveOrUpdate(user);
             tx.commit();
+            System.out.println("User saved successfully: " + user.getUsername()); // Debugging log
         } catch (Exception e) {
             if (tx != null) tx.rollback();
+            System.err.println("Error saving user: " + e.getMessage()); // Debugging log
             throw e;
         }
     }
@@ -33,7 +36,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public Optional<User> findByUsername(String username) throws Exception {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM User WHERE username = :username", User.class)
+            return session.createQuery("FROM users WHERE username = :username", User.class) // Use 'users' instead of 'User'
                     .setParameter("username", username)
                     .uniqueResultOptional();
         }
