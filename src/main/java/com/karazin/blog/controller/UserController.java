@@ -1,8 +1,8 @@
 package com.karazin.blog.controller;
 
+import com.karazin.blog.dao.UserDAO;
+import com.karazin.blog.dao.impl.UserDAOImpl;
 import com.karazin.blog.model.User;
-import com.karazin.blog.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserDAO userDAO = new UserDAOImpl();
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @GetMapping("/register")
     public String showRegistrationForm() {
@@ -26,19 +27,22 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String password, Model model) {
-        // Check if the username already exists
-        if (userRepository.findByUsername(username).isPresent()) {
-            model.addAttribute("error", "Username already exists. Please choose a different username.");
-            return "register"; // Redirect back to the registration page with an error message
+        try {
+            if (userDAO.findByUsername(username).isPresent()) {
+                model.addAttribute("error", "Username already exists. Please choose a different username.");
+                return "register";
+            }
+
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setRole("USER");
+            userDAO.save(user);
+
+            return "redirect:/login";
+        } catch (Exception e) {
+            model.addAttribute("error", "An error occurred during registration.");
+            return "register";
         }
-
-        // Create and save the new user
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole("USER");
-        userRepository.save(user);
-
-        return "redirect:/login";
     }
 }
