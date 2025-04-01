@@ -47,7 +47,7 @@ public class FollowDAOImpl implements FollowDAO {
             return session.createQuery(
                     "SELECT f.followedUser FROM Follow f WHERE f.followingUser = :user", User.class)
                     .setParameter("user", user)
-                    .list();
+                    .getResultList();
         }
     }
 
@@ -57,7 +57,19 @@ public class FollowDAOImpl implements FollowDAO {
             return session.createQuery(
                     "SELECT f.followingUser FROM Follow f WHERE f.followedUser = :user", User.class)
                     .setParameter("user", user)
-                    .list();
+                    .getResultList();
+        }
+    }
+
+    @Override
+    public void deleteByFollowingUserAndFollowedUser(User followingUser, User followedUser) throws Exception {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.createQuery("DELETE FROM Follow f WHERE f.followingUser = :followingUser AND f.followedUser = :followedUser")
+                    .setParameter("followingUser", followingUser)
+                    .setParameter("followedUser", followedUser)
+                    .executeUpdate();
+            session.getTransaction().commit();
         }
     }
 }
