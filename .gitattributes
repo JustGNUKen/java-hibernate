@@ -1,2 +1,34 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+
+# Text files - normalize to LF
+*.java text eol=lf
+*.xml text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+
+# Binary files - don't modify
+*.jar binary
+*.war binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+
+# Handle language statistics on GitHub
+*.html linguist-language=HTML
+*.ftl linguist-language=FreeMarker
+*.properties linguist-language=Properties
